@@ -1,0 +1,32 @@
+# Build artifacts
+dist-newstyle/
+dist/
+*.hi
+*.o
+*.hspec
+*.prof
+*.haddock
+
+# Cabal files
+cabal.project.local
+cabal.project.freeze
+
+# Stack files (se algum dia usar Stack)
+.stack-work/
+
+# OS/IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Executables
+passeio-cavalo.exe
+*.exe
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
