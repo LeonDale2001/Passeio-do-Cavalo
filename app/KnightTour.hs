@@ -2,7 +2,7 @@ module KnightTour
   ( Pos
   , Path
   , knightMoves
-  , knightTour
+  , knightTourOpen
   ) where
 
 import Data.List (sortBy)
@@ -30,15 +30,23 @@ warnsdorffSort moves visited rows cols =
     map snd $ sortBy (\(c1,_) (c2,_) -> compare c1 c2)
         [(countNextMoves p visited rows cols, p) | p <- moves]
 
--- | Knight Tour simples: retorna o primeiro caminho completo encontrado
-knightTour :: Int -> Int -> Pos -> Path -> Maybe Path
-knightTour rows cols current visited
-    | length visited == rows * cols = Just visited
+-- | Verifica se o caminho é aberto (última posição não pode voltar ao início)
+isOpenPath :: Path -> Pos -> Int -> Int -> Bool
+isOpenPath path startPos rows cols =
+    not (startPos `elem` knightMoves (last path) rows cols)
+
+-- | Knight Tour que retorna somente caminhos abertos
+knightTourOpen :: Int -> Int -> Pos -> Path -> Maybe Path
+knightTourOpen rows cols current visited
+    | length visited == rows * cols =
+        if isOpenPath visited (head visited) rows cols
+           then Just visited  -- caminho aberto encontrado
+           else Nothing       -- caminho fechado, ignora
     | otherwise = tryNext (warnsdorffSort nextMoves visited rows cols)
   where
     nextMoves = filter (`notElem` visited) (knightMoves current rows cols)
     tryNext [] = Nothing
     tryNext (m:ms) =
-        case knightTour rows cols m (visited ++ [m]) of
+        case knightTourOpen rows cols m (visited ++ [m]) of
             Just path -> Just path
             Nothing -> tryNext ms

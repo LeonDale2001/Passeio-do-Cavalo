@@ -25,7 +25,7 @@ processLine line =
     case parseLine line of
         Just (rows, cols, startPos) -> do
             printVars rows cols startPos
-            case knightTour rows cols startPos [startPos] of
+            case knightTourOpen rows cols startPos [startPos] of
                 Just path -> putStrLn $ "caminho encontrado: " ++ show path
                 Nothing -> putStrLn "Nenhum caminho encontrado"
         Nothing -> putStrLn $ "Linha inválida: " ++ line
